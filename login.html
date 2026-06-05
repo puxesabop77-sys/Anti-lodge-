@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body { 
+            background-color: #0a0b10; 
+            color: #00ff41; 
+            font-family: 'Courier New', monospace; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .login-card { 
+            background: #161b22; 
+            border: 2px solid #ff9f1c; 
+            padding: 40px; 
+            border-radius: 15px; 
+            width: 350px; 
+            text-align: center; 
+            box-shadow: 0 0 20px rgba(255, 159, 28, 0.2);
+        }
+        input { 
+            width: 100%; 
+            background: #0d1117; 
+            border: 1px solid #30363d; 
+            color: #00ff41; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+            box-sizing: border-box;
+        }
+        button { 
+            background: #ff9f1c; 
+            border: none; 
+            padding: 15px 25px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            border-radius: 5px; 
+            color: #0a0b10; 
+            width: 100%; 
+            margin-top: 10px;
+        }
+        button:hover { background: #e08a15; }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <h2 style="color: #ff9f1c;">ACCESS TERMINAL</h2>
+    <input type="text" id="loginId" placeholder="ENTER USER ID">
+    <input type="password" id="loginPass" placeholder="ENTER PASSWORD">
+    <button onclick="authenticate()">INITIALIZE SESSION</button>
+    <p id="status" style="margin-top: 15px; font-size: 0.8em;"></p>
+</div>
+
+<script>
+    function authenticate() {
+        const inputId = document.getElementById('loginId').value;
+        const inputPass = document.getElementById('loginPass').value;
+        const status = document.getElementById('status');
+
+        // Fetch users from the Admin Panel's localStorage
+        const users = JSON.parse(localStorage.getItem('antiLodgeUsers') || '[]');
+        
+        const user = users.find(u => u.id === inputId && u.pass === inputPass);
+        
+        if (user) {
+            status.innerText = "ACCESS GRANTED. REDIRECTING...";
+            // Save current question to session
+            localStorage.setItem('activeQuestion', user.q);
+            window.location.href = "desk.html";
+        } else {
+            status.innerText = "ACCESS DENIED: INVALID CREDENTIALS";
+            status.style.color = "red";
+        }
+    }
+</script>
+</body>
+  </html>
+  
