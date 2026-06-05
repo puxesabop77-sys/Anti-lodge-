@@ -1,10 +1,17 @@
-<!-- index.html -->
 <div class="card">
-    <h1>Anti Lodge Competition</h1>
-    <p>Summer Vacation me bore ho gaye ho? Chalo kuch naya karte hai!</p>
-    
-    <!-- Placeholder for Google Sign-In -->
-    <div id="google-signin-btn">
-        <button class="cta-button" onclick="signIn()">Sign in with Google</button>
-    </div>
+    <h2>Anti Lodge Competition</h2>
+    <input type="text" id="userName" placeholder="Apna Naam">
+    <input type="email" id="userEmail" placeholder="Apna Gmail">
+    <button class="cta-button" onclick="sendToWhatsApp()">Send to Authoriser</button>
 </div>
+
+<script>
+function sendToWhatsApp() {
+    const name = document.getElementById('userName').value;
+    const email = document.getElementById('userEmail').value;
+    const message = `Hello Authoriser, Mera naam ${name} hai aur email ${email} hai. Please mujhe login credentials dijiye.`;
+    const url = `https://wa.me/9942346634?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+}
+</script>
+
