@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body { 
+            background-color: #fdfaf0; /* Cream background from 1000738029_3.png */
+            font-family: 'Arial', sans-serif; 
+            color: #002b4d; /* Deep Navy text */
+            display: flex; justify-content: center; align-items: center; 
+            height: 100vh; margin: 0; 
+        }
+        .desk-card { 
+            background: white; 
+            border: 4px solid #ff9f1c; /* Vibrant orange border */
+            padding: 40px; 
+            border-radius: 25px; 
+            width: 400px; text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        #question-display { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; }
+        textarea { 
+            width: 100%; height: 100px; padding: 15px; 
+            border: 2px solid #002b4d; border-radius: 10px; 
+            box-sizing: border-box; font-size: 1rem;
+        }
+        button { 
+            background: #ff9f1c; color: white; border: none; 
+            padding: 15px 30px; border-radius: 50px; 
+            font-weight: bold; cursor: pointer; margin-top: 20px; width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="desk-card">
+    <h2 style="color: #ff9f1c;">ANTI LODGE</h2>
+    <p>Apna Dimag ka Use karo!</p>
+    <div id="question-display">Loading your challenge...</div>
+    <textarea id="answerInput" placeholder="Sahi Jawaab likho..."></textarea>
+    <button onclick="submitFinalAnswer()">SUBMIT JAWAB</button>
+</div>
+
+<script>
+    // Load question from localStorage (set by login.html)
+    const question = localStorage.getItem('activeQuestion');
+    document.getElementById('question-display').innerText = question || "No question found!";
+
+    function submitFinalAnswer() {
+        const answer = document.getElementById('answerInput').value;
+        if(answer) {
+            alert("Jawab bhej diya gaya hai! Anti Lodge team aapko contact karegi.");
+            window.location.href = "index.html"; // Redirect back home
+        } else {
+            alert("Pehle jawab toh likho!");
+        }
+    }
+</script>
+</body>
+  </html>
+  
