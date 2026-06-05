@@ -1,12 +1,60 @@
-<!-- admin.html -->
-<div class="card">
-    <h2>Admin Dashboard</h2>
-    <input type="text" id="question" placeholder="Enter Question">
-    <input type="text" id="answer" placeholder="Enter Correct Answer">
-    <button class="cta-button" onclick="addQuestion()">Add Question</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body { background-color: #0a0b10; color: #00ff41; font-family: 'Courier New', monospace; padding: 20px; }
+        .admin-card { background: #161b22; border: 2px solid #ff9f1c; padding: 25px; border-radius: 15px; max-width: 800px; margin: auto; }
+        input, textarea { width: 100%; background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        button { background: #ff9f1c; border: none; padding: 12px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; color: #0a0b10; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #30363d; padding: 10px; text-align: left; }
+    </style>
+</head>
+<body>
 
-    <hr>
-    <h3>Question List</h3>
-    <div id="questionList"></div>
+<div class="admin-card">
+    <h2 style="color: #ff9f1c;">🚀 ANTI LODGE: COMMAND CENTER</h2>
+    
+    <input type="text" id="newId" placeholder="Generate User ID (e.g., AL-101)">
+    <input type="text" id="newPass" placeholder="Generate Password">
+    <textarea id="newQuestion" placeholder="Enter Quiz Question"></textarea>
+    
+    <button onclick="saveUser()">DEPLOY TO SYSTEM</button>
+
+    <h3>Active Database</h3>
+    <table id="userTable">
+        <thead>
+            <tr><th>User ID</th><th>Password</th><th>Question</th></tr>
+        </thead>
+        <tbody id="userBody"></tbody>
+    </table>
 </div>
+
+<script>
+    // Logic to save data to localStorage (Simulating High-Tech Database)
+    function saveUser() {
+        const id = document.getElementById('newId').value;
+        const pass = document.getElementById('newPass').value;
+        const q = document.getElementById('newQuestion').value;
+
+        const newUser = { id, pass, q };
+        let users = JSON.parse(localStorage.getItem('antiLodgeUsers') || '[]');
+        users.push(newUser);
+        localStorage.setItem('antiLodgeUsers', JSON.stringify(users));
+        
+        alert("User Deployed Successfully!");
+        renderTable();
+    }
+
+    function renderTable() {
+        const users = JSON.parse(localStorage.getItem('antiLodgeUsers') || '[]');
+        const body = document.getElementById('userBody');
+        body.innerHTML = users.map(u => `<tr><td>${u.id}</td><td>${u.pass}</td><td>${u.q}</td></tr>`).join('');
+    }
+
+    renderTable(); // Load list on start
+</script>
+</body>
+    </html>
+
   
