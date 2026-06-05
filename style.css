@@ -1,0 +1,26 @@
+/* theme.css */
+body {
+    background-color: #fdfaf0; /* Cream background from 1000738029.png */
+    font-family: 'Arial', sans-serif;
+    color: #002b4d; /* Deep Navy */
+    text-align: center;
+}
+
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: 50px auto;
+}
+
+.cta-button {
+    background-color: #ff9f1c; /* Vibrant orange from 1000738029.png */
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+}
