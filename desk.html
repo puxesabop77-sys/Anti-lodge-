@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Anti Lodge Competition Desk</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+background:linear-gradient(135deg,#fff6d6,#ffe7a0,#ffd66b);
+overflow-x:hidden;
+padding:20px;
+}
+
+.floating{
+position:fixed;
+font-size:40px;
+opacity:.7;
+animation:float 6s ease-in-out infinite;
+pointer-events:none;
+}
+
+.f1{top:10%;left:5%;}
+.f2{top:20%;right:5%;}
+.f3{bottom:15%;left:8%;}
+.f4{bottom:10%;right:10%;}
+
+@keyframes float{
+50%{
+transform:translateY(-20px);
+}
+}
+
+.hero{
+text-align:center;
+margin-bottom:25px;
+}
+
+.hero .sun{
+font-size:70px;
+animation:bounce 3s infinite;
+}
+
+@keyframes bounce{
+50%{
+transform:translateY(-10px);
+}
+}
+
+.hero h1{
+font-size:3rem;
+font-weight:800;
+color:#062e63;
+}
+
+.hero h2{
+font-size:2rem;
+color:#ff7b00;
+}
+
+.hero h3{
+font-size:1.4rem;
+color:#ffb300;
+}
+
+.card{
+max-width:900px;
+margin:auto;
+background:rgba(255,255,255,.75);
+backdrop-filter:blur(18px);
+border-radius:30px;
+padding:25px;
+box-shadow:0 10px 35px rgba(0,0,0,.15);
+}
+
+.user-info{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:14px;
+border:none;
+border-radius:15px;
+outline:none;
+font-size:15px;
+background:#fff;
+}
+
+.progress{
+height:18px;
+background:#e5e5e5;
+border-radius:20px;
+overflow:hidden;
+margin-bottom:20px;
+}
+
+.progress-fill{
+height:100%;
+width:20%;
+background:linear-gradient(90deg,#ff7b00,#ffb300);
+}
+
+.top-bar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+font-weight:700;
+}
+
+.timer{
+color:#ff3d00;
+}
+
+.question-box{
+background:#fffef8;
+padding:25px;
+border-radius:20px;
+margin-bottom:20px;
+}
+
+.question-number{
+font-size:14px;
+color:#777;
+margin-bottom:10px;
+}
+
+.question{
+font-size:1.2rem;
+font-weight:700;
+color:#062e63;
+}
+
+textarea{
+width:100%;
+height:220px;
+padding:18px;
+border:none;
+outline:none;
+border-radius:20px;
+resize:none;
+font-size:16px;
+background:white;
+}
+
+.counter{
+text-align:right;
+margin-top:8px;
+font-weight:600;
+color:#555;
+}
+
+.buttons{
+display:flex;
+gap:12px;
+margin-top:20px;
+}
+
+button{
+flex:1;
+padding:16px;
+border:none;
+border-radius:18px;
+font-size:16px;
+font-weight:700;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+transform:translateY(-2px);
+}
+
+.prev{
+background:#062e63;
+color:white;
+}
+
+.next{
+background:#ffb300;
+color:black;
+}
+
+.submit{
+margin-top:15px;
+width:100%;
+background:linear-gradient(90deg,#ff7b00,#ffb300);
+color:black;
+}
+
+@media(max-width:700px){
+
+.user-info{
+grid-template-columns:1fr;
+}
+
+.hero h1{
+font-size:2.2rem;
+}
+
+.hero h2{
+font-size:1.5rem;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="floating f1">🎁</div>
+<div class="floating f2">🎉</div>
+<div class="floating f3">✈️</div>
+<div class="floating f4">🏖️</div>
+
+<div class="hero">
+
+<div class="sun">😎☀️</div>
+
+<h1>ANTI LODGE</h1>
+
+<h2>SAHI JAWAAB DO</h2>
+
+<h3>INAAM PAO</h3>
+
+</div>
+
+<div class="card">
+
+<div class="user-info">
+
+<input
+type="text"
+id="name"
+placeholder="Enter Your Name">
+
+<input
+type="email"
+id="email"
+placeholder="Enter Your Email">
+
+</div>
+
+<div class="progress">
+<div class="progress-fill"></div>
+</div>
+
+<div class="top-bar">
+
+<div>
+Question 1 / 5
+</div>
+
+<div class="timer" id="timer">
+⏰ 10:00
+</div>
+
+</div>
+
+<div class="question-box">
+
+<div class="question-number">
+Competition Question
+</div>
+
+<div class="question" id="question">
+What is your favourite thing about Summer Vacation?
+</div>
+
+</div>
+
+<textarea
+id="answer"
+maxlength="1000"
+placeholder="Type your answer here..."></textarea>
+
+<div class="counter">
+<span id="count">0</span>/1000
+</div>
+
+<div class="buttons">
+
+<button class="prev">
+⬅ Previous
+</button>
+
+<button class="next">
+Next ➡
+</button>
+
+</div>
+
+<button
+class="submit"
+onclick="submitAnswer()">
+🚀 Submit Answer
+</button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="/js/supabase.js"></script>
+
+<script src="/js/submit-handler.js"></script>
+
+<script>
+
+const answer =
+document.getElementById("answer");
+
+const count =
+document.getElementById("count");
+
+answer.addEventListener("input",()=>{
+
+count.innerText =
+answer.value.length;
+
+});
+
+let seconds = 600;
+
+const timer =
+document.getElementById("timer");
+
+setInterval(()=>{
+
+let min =
+Math.floor(seconds/60);
+
+let sec =
+seconds%60;
+
+timer.innerHTML =
+"⏰ " +
+String(min).padStart(2,"0")
++
+":"
++
+String(sec).padStart(2,"0");
+
+if(seconds>0){
+seconds--;
+}
+
+},1000);
+
+async function submitAnswer(){
+
+const name =
+document.getElementById("name").value;
+
+const email =
+document.getElementById("email").value;
+
+const answerText =
+document.getElementById("answer").value;
+
+if(!name || !email || !answerText){
+
+alert("Please fill all fields");
+
+return;
+}
+
+let userId =
+localStorage.getItem("userId");
+
+if(!userId){
+
+userId =
+"AL" +
+Math.random()
+.toString(36)
+.substring(2,8)
+.toUpperCase();
+
+localStorage.setItem(
+"userId",
+userId
+);
+
+}
+
+if(typeof saveAnswerToDatabase
+=== "function"){
+
+await saveAnswerToDatabase(
+userId,
+name,
+email,
+answerText
+);
+
+}
+
+alert(
+"Answer Submitted Successfully\n\nUser ID: " + userId
+);
+
+}
+
+</script>
+
+</body>
+  </html>
