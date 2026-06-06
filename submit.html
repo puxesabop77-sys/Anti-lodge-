@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Anti Lodge Admin Panel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#062e63,#0a4ea8);
+min-height:100vh;
+padding:20px;
+}
+
+.login-box,
+.panel{
+max-width:1200px;
+margin:auto;
+background:white;
+border-radius:25px;
+padding:25px;
+box-shadow:0 15px 40px rgba(0,0,0,.2);
+}
+
+.login-box{
+margin-top:100px;
+max-width:500px;
+}
+
+h1{
+text-align:center;
+color:#062e63;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:15px;
+border:2px solid #ddd;
+border-radius:15px;
+outline:none;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:15px;
+font-size:16px;
+font-weight:700;
+cursor:pointer;
+background:linear-gradient(90deg,#ff7b00,#ffb300);
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-bottom:25px;
+}
+
+.stat-card{
+background:#f8f8f8;
+padding:20px;
+border-radius:20px;
+text-align:center;
+}
+
+.stat-card h2{
+color:#062e63;
+}
+
+.search-box{
+margin-bottom:20px;
+}
+
+.answer-card{
+background:#fff;
+border:2px solid #eee;
+padding:20px;
+border-radius:20px;
+margin-bottom:15px;
+box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.answer-card h3{
+color:#062e63;
+margin-bottom:10px;
+}
+
+.answer-card p{
+margin:8px 0;
+word-break:break-word;
+}
+
+.answer{
+background:#fff8e7;
+padding:15px;
+border-radius:12px;
+margin-top:10px;
+}
+
+.hidden{
+display:none;
+}
+
+@media(max-width:700px){
+
+.stats{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div id="loginSection" class="login-box">
+
+<h1>🔒 Admin Login</h1>
+
+<input
+type="password"
+id="adminPassword"
+placeholder="Enter Admin Password">
+
+<button onclick="loginAdmin()">
+Open Dashboard
+</button>
+
+</div>
+
+<div id="panelSection" class="panel hidden">
+
+<h1>📋 Submitted Answers</h1>
+
+<div class="stats">
+
+<div class="stat-card">
+<h2 id="totalUsers">0</h2>
+<p>Total Entries</p>
+</div>
+
+<div class="stat-card">
+<h2 id="todayEntries">0</h2>
+<p>Today's Entries</p>
+</div>
+
+</div>
+
+<div class="search-box">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search User ID..."
+onkeyup="filterUsers()">
+
+</div>
+
+<div id="answersContainer"></div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="/js/supabase.js"></script>
+
+<script src="/js/admin-fetch.js"></script>
+
+<script>
+
+let allUsers = [];
+
+async function loginAdmin(){
+
+const pass =
+document.getElementById(
+"adminPassword"
+).value;
+
+if(pass !== "sufiyan500"){
+
+alert(
+"Wrong Password"
+);
+
+return;
+}
+
+document
+.getElementById(
+"loginSection"
+)
+.classList.add(
+"hidden"
+);
+
+document
+.getElementById(
+"panelSection"
+)
+.classList.remove(
+"hidden"
+);
+
+loadAnswers();
+
+}
+
+async function loadAnswers(){
+
+const { data, error } =
+await supabase
+.from("answers")
+.select("*")
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+if(error){
+
+alert(error.message);
+
+return;
+}
+
+allUsers = data;
+
+document
+.getElementById(
+"totalUsers"
+)
+.innerText =
+data.length;
+
+renderUsers(data);
+
+}
+
+function renderUsers(users){
+
+let html = "";
+
+users.forEach(user=>{
+
+html += `
+
+<div class="answer-card">
+
+<h3>
+🆔 ${user.user_id || "N/A"}
+</h3>
+
+<p>
+<b>Name:</b>
+${user.name || "N/A"}
+</p>
+
+<p>
+<b>Email:</b>
+${user.email || "N/A"}
+</p>
+
+<p>
+<b>Date:</b>
+${user.created_at || ""}
+</p>
+
+<div class="answer">
+
+<b>Answer:</b><br>
+${user.answer || ""}
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document
+.getElementById(
+"answersContainer"
+)
+.innerHTML =
+html;
+
+}
+
+function filterUsers(){
+
+const keyword =
+document
+.getElementById(
+"searchInput"
+)
+.value
+.toLowerCase();
+
+const filtered =
+allUsers.filter(user=>{
+
+return (
+(user.user_id || "")
+.toLowerCase()
+.includes(keyword)
+);
+
+});
+
+renderUsers(filtered);
+
+}
+
+</script>
+
+</body>
+  </html>
