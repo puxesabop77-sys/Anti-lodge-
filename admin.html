@@ -1,60 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        body { background-color: #0a0b10; color: #00ff41; font-family: 'Courier New', monospace; padding: 20px; }
-        .admin-card { background: #161b22; border: 2px solid #ff9f1c; padding: 25px; border-radius: 15px; max-width: 800px; margin: auto; }
-        input, textarea { width: 100%; background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px; margin: 10px 0; border-radius: 5px; }
-        button { background: #ff9f1c; border: none; padding: 12px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; color: #0a0b10; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #30363d; padding: 10px; text-align: left; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ANTI LODGE ADMIN</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas,monospace;
+}
+
+body{
+background:#050816;
+color:#00ff88;
+padding:20px;
+}
+
+.card{
+background:#0f172a;
+border:1px solid #00ff88;
+border-radius:15px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 0 20px rgba(0,255,136,.2);
+}
+
+input{
+width:100%;
+padding:12px;
+margin:8px 0;
+background:#000;
+border:1px solid #00ff88;
+color:#00ff88;
+border-radius:10px;
+}
+
+button{
+padding:12px 20px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+background:#00ff88;
+color:#000;
+margin-top:10px;
+}
+
+h1,h2{
+margin-bottom:15px;
+}
+
+.hidden{
+display:none;
+}
+
+.user-card{
+background:#111827;
+padding:15px;
+margin-top:10px;
+border-radius:10px;
+border-left:4px solid #00ff88;
+}
+
+.answer-card{
+background:#111827;
+padding:15px;
+margin-top:10px;
+border-radius:10px;
+border-left:4px solid #00c8ff;
+}
+
+</style>
 </head>
 <body>
 
-<div class="admin-card">
-    <h2 style="color: #ff9f1c;">🚀 ANTI LODGE: COMMAND CENTER</h2>
-    
-    <input type="text" id="newId" placeholder="Generate User ID (e.g., AL-101)">
-    <input type="text" id="newPass" placeholder="Generate Password">
-    <textarea id="newQuestion" placeholder="Enter Quiz Question"></textarea>
-    
-    <button onclick="saveUser()">DEPLOY TO SYSTEM</button>
+<div id="loginBox" class="card">
 
-    <h3>Active Database</h3>
-    <table id="userTable">
-        <thead>
-            <tr><th>User ID</th><th>Password</th><th>Question</th></tr>
-        </thead>
-        <tbody id="userBody"></tbody>
-    </table>
+<h1>🔒 ADMIN ACCESS</h1>
+
+<input
+type="password"
+id="adminPass"
+placeholder="Enter Password">
+
+<button onclick="loginAdmin()">
+ACCESS PANEL
+</button>
+
+</div>
+
+<div id="dashboard" class="hidden">
+
+<div class="card">
+
+<h1>⚡ ANTI LODGE CONTROL PANEL</h1>
+
+<input
+type="text"
+id="name"
+placeholder="User Name">
+
+<input
+type="email"
+id="email"
+placeholder="User Email">
+
+<button onclick="generateUser()">
+GENERATE CREDENTIALS
+</button>
+
+<div id="generated"></div>
+
+</div>
+
+<div class="card">
+
+<h2>🔍 Search User</h2>
+
+<input
+type="text"
+id="search"
+placeholder="Search User ID"
+onkeyup="filterUsers()">
+
+</div>
+
+<div class="card">
+
+<h2>👤 EXISTING CREDENTIALS</h2>
+
+<div id="credentialsList">
+Loading...
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📝 SUBMITTED ANSWERS</h2>
+
+<div id="answersList">
+Loading...
+</div>
+
+</div>
+
 </div>
 
 <script>
-    // Logic to save data to localStorage (Simulating High-Tech Database)
-    function saveUser() {
-        const id = document.getElementById('newId').value;
-        const pass = document.getElementById('newPass').value;
-        const q = document.getElementById('newQuestion').value;
 
-        const newUser = { id, pass, q };
-        let users = JSON.parse(localStorage.getItem('antiLodgeUsers') || '[]');
-        users.push(newUser);
-        localStorage.setItem('antiLodgeUsers', JSON.stringify(users));
-        
-        alert("User Deployed Successfully!");
-        renderTable();
-    }
+let allCredentials=[];
 
-    function renderTable() {
-        const users = JSON.parse(localStorage.getItem('antiLodgeUsers') || '[]');
-        const body = document.getElementById('userBody');
-        body.innerHTML = users.map(u => `<tr><td>${u.id}</td><td>${u.pass}</td><td>${u.q}</td></tr>`).join('');
-    }
+function loginAdmin(){
 
-    renderTable(); // Load list on start
+const pass=
+document.getElementById("adminPass").value;
+
+if(pass!=="sufiyan500"){
+
+alert("Wrong Password");
+return;
+
+}
+
+document.getElementById("loginBox")
+.classList.add("hidden");
+
+document.getElementById("dashboard")
+.classList.remove("hidden");
+
+loadCredentials();
+loadAnswers();
+
+}
+
+async function generateUser(){
+
+const name=
+document.getElementById("name").value;
+
+const email=
+document.getElementById("email").value;
+
+if(!name || !email){
+
+alert("Fill all fields");
+return;
+
+}
+
+const userId=
+"AL"+
+Math.random()
+.toString(36)
+.substring(2,8)
+.toUpperCase();
+
+const password=
+Math.random()
+.toString(36)
+.slice(-8);
+
+const {error}=await supabase
+.from("user_credentials")
+.insert([{
+name:name,
+email:email,
+user_id:userId,
+user_password:password
+}]);
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+document.getElementById("generated")
+.innerHTML=`
+
+<div class="user-card">
+
+<b>User ID:</b> ${userId}<br>
+<b>Password:</b> ${password}
+
+</div>
+
+`;
+
+loadCredentials();
+
+}
+
+async function loadCredentials(){
+
+const {data,error}=await supabase
+.from("user_credentials")
+.select("*")
+.order("created_at",
+{ascending:false});
+
+if(error)return;
+
+allCredentials=data;
+
+renderCredentials(data);
+
+}
+
+function renderCredentials(data){
+
+let html="";
+
+data.forEach(user=>{
+
+html+=`
+
+<div class="user-card">
+
+<b>User:</b> ${user.name}<br>
+
+<b>Email:</b> ${user.email}<br>
+
+<b>User ID:</b> ${user.user_id}<br>
+
+<b>Password:</b> ${user.user_password}
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"credentialsList"
+).innerHTML=html;
+
+}
+
+function filterUsers(){
+
+const keyword=
+document
+.getElementById("search")
+.value
+.toLowerCase();
+
+const filtered=
+allCredentials.filter(user=>
+
+(user.user_id||"")
+.toLowerCase()
+.includes(keyword)
+
+);
+
+renderCredentials(filtered);
+
+}
+
+async function loadAnswers(){
+
+const {data,error}=await supabase
+.from("answers")
+.select("*")
+.order("created_at",
+{ascending:false});
+
+if(error)return;
+
+let html="";
+
+data.forEach(answer=>{
+
+html+=`
+
+<div class="answer-card">
+
+<b>User ID:</b>
+${answer.user_id}<br><br>
+
+<b>Answer:</b><br>
+
+${answer.answer}
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"answersList"
+).innerHTML=html;
+
+}
+
 </script>
-</body>
-    </html>
 
+</body>
+</html>
   
